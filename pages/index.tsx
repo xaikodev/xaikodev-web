@@ -1,5 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { Footer } from "../components/Footer";
+import { Main } from "../components/Main";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
@@ -9,14 +11,10 @@ const Home: NextPage = () => {
         <title>XaikoDev</title>
         <meta name="description" content="Xaiko' personal Website" />
       </Head>
-
-      <main className={styles.main}>
+      <Main>
         <h1>Under construction</h1>
-      </main>
-
-      <footer className={styles.footer}>
-        <p>© 2020 , Code is public on GitHub feel free to steal</p>
-      </footer>
+      </Main>
+    <Footer/>
     </div>
   );
 };
