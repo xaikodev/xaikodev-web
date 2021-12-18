@@ -1,21 +1,11 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import { Footer } from "../src/components/Footer";
-import { Main } from "../src/components/Main";
-import styles from "../src/styles/Home.module.css";
+import { Page } from "src/components/common/Page";
 
 const Home: NextPage = () => {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>XaikoDev</title>
-        <meta name="description" content="Xaiko' personal Website" />
-      </Head>
-      <Main>
-        <h1>Under construction</h1>
-      </Main>
-    <Footer/>
-    </div>
+ <Page>
+   <h1>Main Page Under Contruction</h1>
+ </Page>
   );
 };
 

@@ -21,6 +21,21 @@
   align-items: center;
 }
 
+.link {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.links {
+  position: fixed;
+  left: 70vw;
+  top: 5vh;
+  padding-bottom: 0.3em;
+  border-bottom-color: black;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
 .footer a {
   display: flex;
   justify-content: center;

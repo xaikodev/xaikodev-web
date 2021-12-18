@@ -1,12 +1,12 @@
 import { NextPage } from 'next'
 import React from 'react'
-import { Main } from '../src/components/Main'
+import { Page } from 'src/components/common/Page'
 
 const Projects:NextPage = (props) => {
     return (
-        <Main>
-            Under Construction
-        </Main>
+        <Page title="Projects">
+            <h1>Projects Under Construction</h1>
+        </Page>
     )
 }
 
