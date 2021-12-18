@@ -1,10 +1,10 @@
 import { Box } from "@chakra-ui/layout";
-import { Game } from "components/Universum/Game/Game";
+import { Game } from "src/components/Universum/Game/Game";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Footer } from "../components/Footer";
-import { Main } from "../components/Main";
-import styles from "../styles/Home.module.css";
+import { Footer } from "../src/components/Footer";
+import { Main } from "../src/components/Main";
+import styles from "../../styles/Home.module.css";
 
 const Universum: NextPage = () => {
   return (
