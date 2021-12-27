@@ -1,0 +1,45 @@
+.navbar {
+  position: fixed;
+  left: 65vw;
+  top: 5vh;
+  display: flex;
+  justify-content: center;
+  direction: row-reverse;
+  transition: all 1s ease-out;
+}
+
+.nav {
+  margin-right: 0.5em;
+  padding-bottom: 0.5em;
+  border-bottom-color: black;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  transition: all 0.8s ease-out;
+}
+.navClosed {
+  margin-right: 0.5em;
+  transform: translateX(40vw);
+  transition: all 0.8s ease-out;
+}
+
+.link {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.burger {
+  display: block;
+  background-color: white;
+  text-align: center;
+  font-size: 1.6em;
+  transform: rotate(180deg);
+  transition: all 0.45s ease-out;
+}
+
+.burgerClosed {
+  display: block;
+  background-color: white;
+  transition: all 0.25s ease-out;
+  text-align: center;
+  font-size: 1.6em;
+}
