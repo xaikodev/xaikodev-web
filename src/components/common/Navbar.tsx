@@ -7,7 +7,7 @@ import { transition } from "@chakra-ui/styled-system";
 import { Container } from "@chakra-ui/layout";
 
 export const Navbar: FC = (props) => {
-  const [opened, setOpened] = useState(true);
+  const [opened, setOpened] = useState(false);
   const router = useRouter();
   console.log(router.asPath);
   const toggle = () => {
