@@ -1,32 +1,60 @@
-import { FC, useState } from "react";
+import { CSSProperties, FC, useState } from "react";
 import Link from "next/link";
 import styles from "../../styles/common/navbar.module.css";
 import { HamburgerIcon } from "@chakra-ui/icons";
+import { useRouter } from "next/router";
+import { transition } from "@chakra-ui/styled-system";
+import { Container } from "@chakra-ui/layout";
 
 export const Navbar: FC = (props) => {
   const [opened, setOpened] = useState(true);
-
+  const router = useRouter();
+  console.log(router.asPath);
   const toggle = () => {
     setOpened((op) => !op);
   };
 
+  const activeLink: (location: string) => CSSProperties = (
+    location: string
+  ) => {
+    return router.asPath === location
+      ? {
+          color: "blue",
+          transition: "all 0.3s ease-out",
+          transform: "scale(1.5)",
+          webkitTransform: "scale(1.5)",
+        }
+      : { color: "black", transition: "all 0.3s ease-out" };
+  };
+
   return (
     <nav className={styles.navbar}>
-      <div className={opened ? styles.nav : styles.navClosed}>
+      <Container className={opened ? styles.nav : styles.navClosed}>
         <Link href="/">
-          <a className={styles.link}>Home</a>
+          <p className={styles.link} style={activeLink("/")}>
+            Home
+          </p>
         </Link>
         <Link href="/bio">
-          <a className={styles.link}>Bio</a>
+          <p className={styles.link} style={activeLink("/bio")}>
+            Bio
+          </p>
         </Link>
         <Link href="/projects">
-          <a className={styles.link}>Projects</a>
+          <p className={styles.link} style={activeLink("/projects")}>
+            Projects
+          </p>
         </Link>
         <Link href="/contact">
-          <a className={styles.link}>Contact</a>
+          <p className={styles.link} style={activeLink("/contact")}>
+            Contact
+          </p>
         </Link>
-      </div>
-      <HamburgerIcon className={opened ? styles.burger: styles.burgerClosed} onClick={toggle} />
+      </Container>
+      <HamburgerIcon
+        className={opened ? styles.burger : styles.burgerClosed}
+        onClick={toggle}
+      />
     </nav>
   );
 };

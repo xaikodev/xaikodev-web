@@ -1,7 +1,7 @@
 .navbar {
   position: fixed;
-  left: 65vw;
-  top: 5vh;
+  left: 85vw;
+  top: 2vh;
   display: flex;
   justify-content: center;
   direction: row-reverse;
@@ -9,15 +9,9 @@
 }
 
 .nav {
-  margin-right: 0.5em;
-  padding-bottom: 0.5em;
-  border-bottom-color: black;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
   transition: all 0.8s ease-out;
 }
 .navClosed {
-  margin-right: 0.5em;
   transform: translateX(40vw);
   transition: all 0.8s ease-out;
 }

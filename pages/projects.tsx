@@ -1,13 +1,8 @@
-import { NextPage } from 'next'
-import React from 'react'
-import { Page } from 'src/components/common/Page'
+import { NextPage } from "next";
+import React from "react";
 
-const Projects:NextPage = (props) => {
-    return (
-        <Page title="Projects">
-            <h1>Projects Under Construction</h1>
-        </Page>
-    )
-}
+const Projects: NextPage = (props) => {
+  return <h1>Projects Under Construction</h1>;
+};
 
-export default Projects
+export default Projects;
