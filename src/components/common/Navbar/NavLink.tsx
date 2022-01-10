@@ -16,10 +16,19 @@ export const NavLink: FC<NavLinkProps> = (props) => {
   const isActive = router.asPath === link;
 
   const color = isActive ? "blue" : "black";
+  const thickness = isActive ? "thick" : "thin";
 
   return (
     <NextLink href={link}>
-      <Link color={color} borderBottom={color} borderBottomRadius={"20%"} borderBottomStyle={"solid"} borderBottomWidth={isActive ? "thick" : "thin"} className={style.navLink} w='100%'>
+      <Link
+        color={color}
+        borderBottom={color}
+        borderBottomRadius={"20%"}
+        borderBottomStyle={"solid"}
+        borderBottomWidth={thickness}
+        className={style.navLink}
+        w="100%"
+      >
         {title}
       </Link>
     </NextLink>
