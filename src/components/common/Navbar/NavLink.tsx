@@ -16,7 +16,6 @@ export const NavLink: FC<NavLinkProps> = (props) => {
   const isActive = router.asPath === link;
 
   const color = isActive ? "blue" : "black";
-  const scale = isActive ? "2" : "1"
 
   return (
     <NextLink href={link}>
