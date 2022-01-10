@@ -19,7 +19,7 @@ export const NavLink: FC<NavLinkProps> = (props) => {
 
   return (
     <NextLink href={link}>
-      <Link color={color} className={style.navLink} w='100%' p={4}>
+      <Link color={color} borderBottom={color} borderBottomRadius={"20%"} borderBottomStyle={"solid"} borderBottomWidth={isActive ? "thick" : "thin"} className={style.navLink} w='100%'>
         {title}
       </Link>
     </NextLink>
