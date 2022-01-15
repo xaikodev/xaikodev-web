@@ -22,10 +22,6 @@ export const NavLink: FC<NavLinkProps> = (props) => {
     <NextLink href={link}>
       <Link
         color={color}
-        borderBottom={color}
-        borderBottomRadius={"20%"}
-        borderBottomStyle={"solid"}
-        borderBottomWidth={thickness}
         className={style.navLink}
         w="100%"
       >
