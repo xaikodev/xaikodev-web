@@ -1,21 +1,26 @@
 import { FC, useState } from "react";
-import { SearchBar } from "./components/SearchBar";
-import { SearchList } from "./components/SearchList";
+import { Bar } from "./components/Bar";
+import { List } from "./components/List";
 
 interface SearchProps {
   opened: boolean;
   currentToken: string;
   selectToken: (token: string) => void;
-  cancel: () => void;
 }
 export const Search: FC<SearchProps> = (props) => {
-  const { opened, cancel, currentToken, selectToken } = props;
-  const [SearchInput, setSearchInput] = useState("");
-  const isOpened = opened ? "block" : "none";
+  const { opened, currentToken, selectToken } = props;
+  const [SearchInput, setSearchInput] = useState(currentToken);
+
   return (
-    <div style={{ display: isOpened }}>
-      <SearchBar value={SearchInput} onChange={setSearchInput} />
-      <SearchList/>
+    <div style={{ display: opened ? "block" : "none" }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <Bar value={SearchInput} onChange={setSearchInput} />
+        <List
+          filter={SearchInput}
+          onSelect={selectToken}
+          currentToken={currentToken}
+        />
+      </div>
     </div>
   );
 };

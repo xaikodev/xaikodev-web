@@ -1,4 +1,5 @@
 import { FC, useState } from "react";
+import { useClickOutside } from "src/hooks/useClickOutside";
 import { Action } from "./components/Action";
 import { Input } from "./components/Input";
 import { Search } from "./components/Search/Search";
@@ -13,10 +14,11 @@ interface TokenProps {
 export const Token: FC<TokenProps> = (props) => {
   const { token, action } = props;
   const [value, setValue] = useState(0);
-  const [OpenedSearch, setOpenedSearch] = useState(false)
+  const [OpenedSearch, setOpenedSearch] = useState(false);
+
   const setMaxValue = () => {};
   const openSearch = () => {
-    setOpenedSearch( prevVal => !prevVal);
+    setOpenedSearch(prevVal => !prevVal);
   };
 
   const selectToken = (token: string) => {
@@ -25,18 +27,24 @@ export const Token: FC<TokenProps> = (props) => {
 
   const cancelSearch = () => {
     setOpenedSearch(false);
-  }
+  };
+  const SearchRef = useClickOutside(cancelSearch);
+
   return (
-    <div>
-      <div style={{display: "flex", justifyContent: "space-between"}}>
+    <div ref={SearchRef}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Action text={action} />
         <Wallet value={0.0} token={token} onClick={setMaxValue} />
       </div>
-      <div style={{display: "flex", alignContent: "stretch"}}>
-        <Input value={value} onChange={setValue}/>
-        <TokenIcon token={token} onClick={openSearch}/>
+      <div style={{ display: "flex", alignContent: "stretch" }}>
+        <Input value={value} onChange={setValue} />
+        <TokenIcon token={token} onClick={openSearch} />
       </div>
-        <Search opened={OpenedSearch} currentToken={token} cancel={cancelSearch} selectToken={selectToken}/>
+      <Search
+        opened={OpenedSearch}
+        currentToken={token}
+        selectToken={selectToken}
+      />
     </div>
   );
 };

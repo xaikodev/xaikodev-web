@@ -1,11 +1,11 @@
 import { ChangeEventHandler, FC } from "react";
 
-interface SearchBarProps {
+interface BarProps {
   value: string;
   onChange: (value: string) => void;
 }
 
-export const SearchBar: FC<SearchBarProps> = (props) => {
+export const Bar: FC<BarProps> = (props) => {
   const { value, onChange } = props;
   const changeHandler: ChangeEventHandler<HTMLInputElement> = ({
     target: { value }
