@@ -1,3 +1,10 @@
+import {
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper
+} from "@chakra-ui/react";
 import { ChangeEventHandler, FC } from "react";
 
 interface InputProps {
@@ -8,11 +15,32 @@ interface InputProps {
 export const Input: FC<InputProps> = (props) => {
   const { value, onChange } = props;
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = ({
-    target: { value }
-  }) => {
-    onChange(Number(value || 0));
+  const handleChange = (valueAsString: string, valueAsNumber: number) => {
+    onChange(valueAsNumber);
   };
 
-  return <input type={"number"} min={0} step={0.00000001} value={value} onChange={handleChange}></input>;
+  return (
+    <NumberInput
+      width={"100%"}
+      defaultValue={15}
+      precision={8}
+      step={1 / 10 ** 8}
+      value={value}
+      onChange={handleChange}
+      borderColor={"lime"}
+      fontSize={"xl"}
+      _active={{ borderColor: "lime" }}
+      _focus={{ borderColor: "lime" }}
+    >
+      <NumberInputField />
+      <NumberInputStepper borderColor={"lime"}>
+        <NumberIncrementStepper borderColor={"lime"} _active={{ bg: "lime" }}>
+          +
+        </NumberIncrementStepper>
+        <NumberDecrementStepper borderColor={"lime"} _active={{ bg: "lime" }}>
+          -
+        </NumberDecrementStepper>
+      </NumberInputStepper>
+    </NumberInput>
+  );
 };

@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import { useClickOutside } from "src/hooks/useClickOutside";
 import { Action } from "./components/Action";
@@ -18,7 +19,7 @@ export const Token: FC<TokenProps> = (props) => {
 
   const setMaxValue = () => {};
   const openSearch = () => {
-    setOpenedSearch(prevVal => !prevVal);
+    setOpenedSearch((prevVal) => !prevVal);
   };
 
   const selectToken = (token: string) => {
@@ -31,20 +32,39 @@ export const Token: FC<TokenProps> = (props) => {
   const SearchRef = useClickOutside(cancelSearch);
 
   return (
-    <div ref={SearchRef}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <VStack
+      color={"lime"}
+      border={"solid"}
+      borderColor={"lime"}
+      padding={3}
+      borderRadius={25}
+      borderWidth={1}
+      width={"100%"}
+      ref={SearchRef}
+    >
+      <HStack width={"100%"} justifyContent={"space-between"}>
         <Action text={action} />
         <Wallet value={0.0} token={token} onClick={setMaxValue} />
-      </div>
-      <div style={{ display: "flex", alignContent: "stretch" }}>
+      </HStack>
+      <HStack
+        width={"100%"}
+        color={"lime"}
+        border={"solid"}
+        borderWidth={1}
+        borderRadius={50}
+        padding={1}
+        paddingStart={5}
+        paddingEnd={5}
+        borderColor={"lime"}
+      >
         <Input value={value} onChange={setValue} />
         <TokenIcon token={token} onClick={openSearch} />
-      </div>
+      </HStack>
       <Search
         opened={OpenedSearch}
         currentToken={token}
         selectToken={selectToken}
       />
-    </div>
+    </VStack>
   );
 };

@@ -1,3 +1,4 @@
+import { VStack } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import { ActionButton } from "../UI/ActionButton";
 import { Switcher } from "../UI/Switcher";
@@ -10,10 +11,18 @@ export const Trade: FC<TradeProps> = (props) => {
 
   const {} = props;
   return (
-    <div>
+    <VStack
+    width={"100%"}
+    justifyContent={"space-between"}
+    height={"100%"}
+    border={"solid"}
+    borderColor={"lime"}
+    padding={5}
+    borderRadius={25}
+    borderWidth={1}>
         <Token action="Buy" token={Token1.token}/>
         <Switcher/>
         <Token action="Sell" token={Token2.token}/>
         <ActionButton/>
-    </div>);
+    </VStack>);
 };
