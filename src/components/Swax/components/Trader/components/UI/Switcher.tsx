@@ -1,14 +1,16 @@
 import { UpDownIcon } from "@chakra-ui/icons";
-import { FC } from "react";
+import { FC, useEffect } from "react";
+import { useWax } from "src/components/Swax/hooks/useWax";
 
 interface SwitcherProps {
   onClick?: () => void;
 }
 export const Switcher: FC<SwitcherProps> = (props) => {
+  const { login } = useWax();
   const {} = props;
   return (
     <UpDownIcon
-      onClick={props.onClick}
+      onClick={login}
       color={"lime"}
       w={20}
       h={20}
