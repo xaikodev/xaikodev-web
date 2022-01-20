@@ -52,7 +52,7 @@ export const WaxProvider: React.FC = ({ children }) => {
 
   const getAlcorSwapTokens = async () => {
     try {
-      const value = await wax.api.rpc.get_table_rows({
+      const AlcorTable = await wax.api.rpc.get_table_rows({
         json: true,
         code: "alcorammswap",
         scope: "alcorammswap",
@@ -65,7 +65,7 @@ export const WaxProvider: React.FC = ({ children }) => {
         reverse: false,
         show_payer: false
       });
-      const pools: AlcorLP[] = value.rows.map((row) => {
+      const pools: AlcorLP[] = AlcorTable.rows.map((row) => {
         return {
           id: row.id,
           contract: "alcorammswap",
@@ -132,7 +132,7 @@ export const WaxProvider: React.FC = ({ children }) => {
     const tokensIco = await tokenIconts.json();
     console.log(tokensIco);
     const tokens = fetch(
-      "https://lightapi.eosamsterdam.net/api/balances/wax/pk4be.wam"
+      `https://lightapi.eosamsterdam.net/api/balances/wax/${account.name}`
     );
     const response = await (await tokens).json();
     setAccount((acc) => ({
