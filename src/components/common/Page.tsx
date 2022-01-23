@@ -3,7 +3,7 @@ import Head from "next/head";
 import { Footer } from "./Footer";
 import { Main } from "./Main";
 import styles from "../../styles/Home.module.css";
-import { Header } from "./Header/Header";
+import Header from "./Header";
 
 export interface PageProps {
   title?: string;
