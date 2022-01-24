@@ -1,75 +1,70 @@
 import {
-  Flex,
   Container,
   Heading,
   Stack,
   Text,
   Button,
-  IconProps
+  Input,
+  Image
 } from "@chakra-ui/react";
-import Image from "next/image";
 import HeroImage from "../../lib/Hero Image.jpg";
-import styles from "./hero.module.css";
 
 export const Hero = () => {
   return (
-    <Container maxW={"5xl"}>
+    <Container maxW={"8xl"}>
       <Stack
-        textAlign={"center"}
+        direction={"row"}
+        wrap={"wrap"}
         align={"center"}
-        spacing={{ base: 8, md: 10 }}
-        py={{ base: 20, md: 28 }}
+        justify={"center"}
       >
-        <Heading
-          fontWeight={600}
-          fontSize={{ base: "3xl", sm: "4xl", md: "6xl" }}
-          lineHeight={"110%"}
+        <Stack
+          spacing={{ base: 8, md: 10 }}
+          margin={{ base: 6, sm: 4, md: 12 }}
         >
-          Your digital needs{" "}
-          <Text as={"span"} color={"green.400"}>
-            fulfilled
-          </Text>{" "}
-        </Heading>
-        <Text color={"gray.500"} maxW={"3xl"}>
-          Never miss the oportunity to improve and grow your digital space. You
-          bring the vision and we will make it a reality.
-        </Text>
-        <Stack spacing={6} direction={"row"}>
-          <Button
-            rounded={"full"}
-            px={6}
-            bg={"green.400"}
-            _hover={{ bg: "green.500" }}
+          <Heading
+            fontWeight={700}
+            textAlign={"center"}
+            fontSize={{ base: "2xl", sm: "4xl", md: "5xl" }}
           >
-            Get started
-          </Button>
-          <Button rounded={"full"} px={6}>
-            Learn more
-          </Button>
+            Your digital needs
+            <Text as={"span"} color={"green.300"}>
+              {" "}
+              fulfilled{" "}
+            </Text>
+          </Heading>
+          <Text color={"gray.400"} maxW={"xl"} align={"start"} fontSize={"2xl"}>
+            Never miss the oportunity to improve and grow your digital space.
+            You bring the vision and we will make it a reality.
+          </Text>
+          <Stack spacing={6} direction={"row"} align="flex-start">
+            <Input
+              placeholder="your@email.com"
+              size="md"
+              focusBorderColor={"green.400"}
+              borderColor={"green.600"}
+            />
+            <Button
+              size="md"
+              rounded={"full"}
+              px={6}
+              bg={"green.600"}
+              _hover={{ bg: "green.400" }}
+            >
+              Get started
+            </Button>
+          </Stack>
         </Stack>
-        <Flex
-          height={{ sm: "25rem", lg: "30rem" }}
-          mt={{ base: 12, sm: 16 }}
-          boxShadow={`0px 1rem 3rem rgb(72 187 120)`}
-          style={{
-            backgroundColor: "rgba(0,0,0,0)",
-            borderRadius: "20px"
-          }}
-        > 
-          <Illustration />
-        </Flex>
+        <Image
+          align={"center"}
+          blockSize={{ base: "xl", sm: "xs", md: "md" }}
+          borderRadius={"3xl"}
+          p={"10px"}
+          boxShadow={"inset 0 0 12px 1px green, 0 0 20px 1px rgba(50, 255, 50, 0.6)"}
+          src="https://images.unsplash.com/photo-1515704089429-fd06e6668458?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+          alt="Hero Image"
+        />
       </Stack>
     </Container>
-  );
-};
-
-export const Illustration = () => {
-  return (
-    <Image
-      className={styles.headerImage}
-      src={HeroImage}
-      layout="intrinsic"
-      alt="Hero Header Image"
-    ></Image>
   );
 };
