@@ -1,9 +1,13 @@
+import { Box } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { Page } from "src/components/common/Page";
+import { Hero } from "../src/components/Home/Hero";
 
 const Home: NextPage = () => {
   return (
-   <h1>Main Page Under Contruction</h1>
+    <Box>
+      <Hero></Hero>
+    </Box>
   );
 };
 
