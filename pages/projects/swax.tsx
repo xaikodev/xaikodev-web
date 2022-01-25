@@ -6,7 +6,7 @@ import { WaxProvider } from "src/components/Swax/hooks/useWax";
 const Swax: NextPage = () => {
   return (
     <WaxProvider>
-      {/* components */}
+     
       <Trader />
       <Charter />
       <div></div>
