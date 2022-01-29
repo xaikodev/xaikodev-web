@@ -1,13 +1,13 @@
 import { Button, HStack, Text } from "@chakra-ui/react";
 import { FC } from "react";
-import { WalletToken } from "src/components/Swax/hooks/useWallet";
 
 interface WalletProps {
-  token: WalletToken;
+  value: number;
+  token: string;
   onClick: () => void;
 }
 export const Wallet: FC<WalletProps> = (props) => {
-  const { token, onClick } = props;
+  const { value, token, onClick } = props;
   return (
     <Button
       variant="outline"
@@ -20,8 +20,8 @@ export const Wallet: FC<WalletProps> = (props) => {
       borderColor={"lime"}
       onClick={onClick}
     >
-      <Text fontSize='lg'>{token.balance}{" "}</Text>
-      <Text fontSize='lg'>{token.symbol}</Text>
+      <Text fontSize='lg'>{value}</Text>
+      <Text fontSize='lg'>{token}</Text>
     </Button>
   );
 };

@@ -1,6 +1,5 @@
 import { HStack, VStack } from "@chakra-ui/react";
 import { FC, useState } from "react";
-import { WalletToken } from "src/components/Swax/hooks/useWallet";
 import { useClickOutside } from "src/hooks/useClickOutside";
 import { Action } from "./components/Action";
 import { Input } from "./components/Input";
@@ -10,7 +9,7 @@ import { Wallet } from "./components/Wallet";
 
 interface TokenProps {
   action: string;
-  token: WalletToken;
+  token: string;
 }
 
 export const Token: FC<TokenProps> = (props) => {
@@ -45,7 +44,7 @@ export const Token: FC<TokenProps> = (props) => {
     >
       <HStack width={"100%"} justifyContent={"space-between"}>
         <Action text={action} />
-        <Wallet token={token} onClick={setMaxValue} />
+        <Wallet value={0.0} token={token} onClick={setMaxValue} />
       </HStack>
       <HStack
         width={"100%"}
@@ -63,7 +62,7 @@ export const Token: FC<TokenProps> = (props) => {
       </HStack>
       <Search
         opened={OpenedSearch}
-        currentToken={token.name}
+        currentToken={token}
         selectToken={selectToken}
       />
     </VStack>
