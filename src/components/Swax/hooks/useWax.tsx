@@ -1,33 +1,42 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import * as waxjs from "@waxio/waxjs/dist";
-import { ProvideWallet } from "./useWallet";
-import { ProvideTokens, Token, useTokens } from "./useTokens";
+import { GetAccountResult, GetTableRowsResult } from "eosjs/dist/eosjs-rpc-interfaces";
+import { Action } from "eosjs/dist/eosjs-serialize";
+import { TransactConfig } from "eosjs/dist/eosjs-api-interfaces";
 
-type AlcorLP = {
-  id: string;
+export interface WAXToken {
+  amount: number;
   contract: string;
+  precision: number;
   symbol: string;
-  supply: number;
-  fee: number;
-  fee_contract: string;
-  pair: { quantity: number; contract: string; name: string }[];
-};
-
+}
 export interface WaxAccount {
   name: string;
   pubKeys: string[];
+  wallet: WAXToken[];
+  details: GetAccountResult;
+}
+
+export interface GetProps {
+  code: string;
+  scope: string;
+  table: string;
+  lower_bound?: string | null;
+  upper_bound?: string | null;
+  index: number;
+  key_type: string;
+  limit: string;
+  reverse?: boolean;
+  show_payer?: boolean;
 }
 
 interface UseWax {
   wax: waxjs.WaxJS;
   account: WaxAccount;
-  tokens: Token[];
-  getTokenLogo: (
-    account: string,
-    name: string
-  ) => { logo: string; logo_lg: string };
   isConnected: boolean;
   login: () => Promise<void>;
+  transact: (actions: Action[], options?: TransactConfig) => Promise<void>;
+  get: (props: GetProps) => Promise<GetTableRowsResult>;
 }
 
 const WaxContext = createContext<UseWax>({} as UseWax);
@@ -35,93 +44,66 @@ const WaxContext = createContext<UseWax>({} as UseWax);
 export const useWax = () => useContext(WaxContext);
 
 export const WaxProvider: React.FC = ({ children }) => {
-  const wax = useMemo(
-    () => new waxjs.WaxJS({ rpcEndpoint: "https://wax.greymass.com" }),
-    []
-  );
-  const { tokens, getTokenLogo } = useTokens();
-  const [account, setAccount] = useState<WaxAccount>({
-    name: wax.userAccount,
-    pubKeys: wax.pubKeys
-  });
+  const wax = useMemo(() => new waxjs.WaxJS({ rpcEndpoint: "https://wax.greymass.com" }), []);
+  const [account, setAccount] = useState<WaxAccount>({ name: wax.userAccount, pubKeys: wax.pubKeys } as WaxAccount);
 
-  const login = async () => {
+  const login = useCallback(async () => {
     const accountName = await wax.login();
+    const details = await getDetails();
+    const wallet = await getWallet();
+    setAccount({ pubKeys: wax.pubKeys, name: accountName, details, wallet });
+  }, [wax, setAccount]);
 
-    setAccount({ ...account, name: accountName });
-    await getAlcorSwapTokens();
-  };
+  const transact = useCallback(
+    async (actions: Action[], options?: TransactConfig) => {
+      try {
+        const result = await wax.api.transact(
+          { actions },
+          options || {
+            blocksBehind: 3,
+            expireSeconds: 30,
+          }
+        );
+        console.dir(result);
+      } catch (e) {
+        throw e;
+      }
+    },
+    [wax]
+  );
 
-  const getAlcorSwapTokens = async () => {
-    try {
-      const AlcorTable = await wax.api.rpc.get_table_rows({
+  const get = useCallback(
+    async (props: GetProps) => {
+      const tableRows = await wax.api.rpc.get_table_rows({
         json: true,
-        code: "alcorammswap",
-        scope: "alcorammswap",
-        table: "pairs",
         lower_bound: null,
         upper_bound: null,
-        index_position: 1,
-        key_type: "",
-        limit: "100000",
         reverse: false,
-        show_payer: false
+        show_payer: false,
+        ...props,
       });
-      const pools: AlcorLP[] = AlcorTable.rows.map((row) => {
-        return {
-          id: row.id,
-          contract: "alcorammswap",
-          symbol: row.supply.split(" ")[1],
-          supply: Number(row.supply.split(" ")[0]),
-          fee: row.fee,
-          fee_contract: row.fee_contract,
-          pair: [
-            {
-              quantity: Number(row.pool1.quantity.split(" ")[0]),
-              contract: row.pool1.contract,
-              name: row.pool1.quantity.split(" ")[1]
-            },
-            {
-              quantity: Number(row.pool2.quantity.split(" ")[0]),
-              contract: row.pool2.contract,
-              name: row.pool2.quantity.split(" ")[1]
-            }
-          ]
-        };
-      });
-      const tokens0 = pools.map((pool) => {
-        return {
-          symbol: pool.pair[0].name,
-          contract: pool.pair[0].contract
-        };
-      });
-      const tokens1 = pools.map((pool) => {
-        return {
-          symbol: pool.pair[1].name,
-          contract: pool.pair[1].contract
-        };
-      });
-      const newTokens = tokens0.concat(tokens1);
-      console.log(
-        newTokens
-          .map(function (o) {
-            return o.symbol;
-          })
-          .filter(function (v, i, a) {
-            return a.indexOf(v) === i;
-          })
-          .map((tokenNames) => {
-            return {
-              symbol: tokenNames,
-              contract: newTokens.find((token) => token.symbol === tokenNames)
-                ?.contract
-            };
-          })
-      );
+      return tableRows;
+    },
+    [wax]
+  );
+
+  const getWallet = useCallback(async () => {
+    try {
+      const response = await fetch(`https://wax.eosrio.io/v2/state/get_tokens?account=${account.name}`);
+      const result = await response.json();
+      return await result.tokens;
     } catch (e) {
       throw e;
     }
-  };
+  }, [account]);
+
+  const getDetails = useCallback(async () => {
+    try {
+      return await wax.rpc.get_account(account.name);
+    } catch (e) {
+      throw e;
+    }
+  }, [wax, account]);
 
   useEffect(() => {
     wax.isAutoLoginAvailable().then((isAutoLoginAvailable) => {
@@ -134,19 +116,17 @@ export const WaxProvider: React.FC = ({ children }) => {
   }, [wax]);
 
   return (
-    <ProvideTokens>
-      <WaxContext.Provider
-        value={{
-          account,
-          login,
-          isConnected: Boolean(account.name),
-          tokens,
-          getTokenLogo,
-          wax
-        }}
-      >
-        <ProvideWallet>{children}</ProvideWallet>
-      </WaxContext.Provider>
-    </ProvideTokens>
+    <WaxContext.Provider
+      value={{
+        account,
+        login,
+        isConnected: Boolean(account.name),
+        wax,
+        transact,
+        get,
+      }}
+    >
+      {children}
+    </WaxContext.Provider>
   );
 };
