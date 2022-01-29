@@ -11,16 +11,23 @@ export interface WAXAccountToken {
   symbol: string;
 }
 
-export const WaxAccount = atom({
+export const Wax = atom({
+  key: "WaxState",
+  default: wax
+});
+
+export const WaxAccount = selector({
   key: "WaxAccountState",
-  default: {
-    name: wax.userAccount,
-    pubKeys: wax.pubKeys
+  get: async ({ get }) => {
+    const waxState = get(Wax);
+    const name = waxState.userAccount;
+    const pubKeys = waxState.pubKeys;
+    return { name, pubKeys };
   }
 });
 
 export const WaxAccountDetails = selector<GetAccountResult>({
-  key: "WaxAccountDetailsState",
+  key: "WaxAccountDetailsSelector",
   get: async ({ get }) => {
     const account = get(WaxAccount);
     return await wax.rpc.get_account(account.name);
@@ -28,7 +35,7 @@ export const WaxAccountDetails = selector<GetAccountResult>({
 });
 
 export const WaxWallet = selector<WAXAccountToken[]>({
-  key: "WaxWalletState",
+  key: "WaxWalletSelector",
   get: async ({ get }) => {
     const account = get(WaxAccount);
     const response = await fetch(
