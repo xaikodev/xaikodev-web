@@ -1,7 +1,9 @@
+import { Icon, Text } from "@chakra-ui/react";
 import { FC } from "react";
+import { WalletToken } from "src/components/Swax/hooks/useWallet";
 
 interface TokenIconProps {
-  token: string;
+  token: WalletToken;
   onClick: () => void;
 }
 export const TokenIcon: FC<TokenIconProps> = (props) => {
@@ -15,8 +17,8 @@ export const TokenIcon: FC<TokenIconProps> = (props) => {
       }}
     >
       <div>
-        <label>Icon</label>
-        <label>{token}</label>
+        <Icon href={token.logo} />
+        <Text>{token.symbol}</Text>
       </div>
       <button onClick={onClick}>v</button>
     </div>
