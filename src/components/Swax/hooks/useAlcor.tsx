@@ -64,6 +64,8 @@ const useAlcorHook: () => AlcorContextType = () => {
     }
   }, [wax, setPairs]);
 
+  const estimate = useCallback(async(tokenFrom: WAXToken, tokenTo: WAXToken) => {}, [wax])
+
   const swap = useCallback(
     async (tokenFrom: WAXToken, tokenTo: WAXToken, quantity: number, minReceived: number) => {
       transact([
@@ -87,6 +89,8 @@ const useAlcorHook: () => AlcorContextType = () => {
     },
     [transact]
   );
+
+  const arbitrage = useCallback(async () => {}, [wax])
 
   useEffect(() => {
     const pairTimeout = setInterval(() => getPairs(), 10000);
