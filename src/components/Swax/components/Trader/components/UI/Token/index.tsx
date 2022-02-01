@@ -1,4 +1,4 @@
-import { HStack, Stack } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import { WalletToken } from "src/components/Swax/hooks/useWallet";
 import { useClickOutside } from "src/hooks/useClickOutside";
