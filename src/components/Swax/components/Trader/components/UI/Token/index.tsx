@@ -1,4 +1,4 @@
-import { HStack, VStack } from "@chakra-ui/react";
+import { HStack, Stack } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import { WalletToken } from "src/components/Swax/hooks/useWallet";
 import { useClickOutside } from "src/hooks/useClickOutside";
@@ -33,39 +33,20 @@ export const Token: FC<TokenProps> = (props) => {
   const SearchRef = useClickOutside(cancelSearch);
 
   return (
-    <VStack
-      color={"lime"}
-      border={"solid"}
-      borderColor={"lime"}
-      padding={3}
-      borderRadius={25}
-      borderWidth={1}
-      width={"100%"}
-      ref={SearchRef}
-    >
-      <HStack width={"100%"} justifyContent={"space-between"}>
+    <Stack direction="column" ref={SearchRef}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Action text={action} />
         <Wallet token={token} onClick={setMaxValue} />
-      </HStack>
-      <HStack
-        width={"100%"}
-        color={"lime"}
-        border={"solid"}
-        borderWidth={1}
-        borderRadius={50}
-        padding={1}
-        paddingStart={5}
-        paddingEnd={5}
-        borderColor={"lime"}
-      >
+      </Stack>
+      <Stack direction="row">
         <Input value={value} onChange={setValue} />
         <TokenIcon token={token} onClick={openSearch} />
-      </HStack>
+      </Stack>
       <Search
         opened={OpenedSearch}
         currentToken={token.name}
         selectToken={selectToken}
       />
-    </VStack>
+    </Stack>
   );
 };

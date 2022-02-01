@@ -7,7 +7,7 @@ import { WaxProvider } from "src/components/Swax/hooks/useWax";
 const Swax: NextPage = () => {
   return (
     <WaxProvider>
-      <Stack direction={"row"}>
+      <Stack direction={"row"} width="full" wrap="wrap">
       <Trader />
       <Charter />
       </Stack>
