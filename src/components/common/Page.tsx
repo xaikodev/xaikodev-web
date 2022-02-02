@@ -1,9 +1,9 @@
 import { FC } from "react";
 import Head from "next/head";
 import { Footer } from "./Footer";
-import { Main } from "./Main";
-import styles from "../../styles/Home.module.css";
+import { Main } from "./Main"; 
 import Header from "./Header";
+import { Stack } from "@chakra-ui/layout";
 
 export interface PageProps {
   title?: string;
@@ -11,7 +11,7 @@ export interface PageProps {
 
 export const Page: FC<PageProps> = (props) => {
   return (
-    <div className={styles.container}>
+    <Stack>
       <Head>
         <title>{props.title ? props.title + " | XaikoDev" : "XaikoDev"}</title>
         <meta name="description" content="Xaiko' personal Website" />
@@ -19,6 +19,6 @@ export const Page: FC<PageProps> = (props) => {
       <Header />
       <Main>{props.children}</Main>
       <Footer />
-    </div>
+    </Stack>
   );
 };
