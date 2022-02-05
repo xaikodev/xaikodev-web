@@ -1,19 +1,19 @@
-import { Icon, Text, Stack, Button, useColorModeValue } from "@chakra-ui/react";
+import { Text, Stack, Button, useColorModeValue, Image } from "@chakra-ui/react";
 import { FC } from "react";
-import { WalletToken } from "src/components/Swax/hooks/useWallet";
+import { Token } from "src/components/Swax/models/wax.models";
 
 interface TokenIconProps {
-  token: WalletToken;
-  onClick: () => void;
+  token: Token;
 }
 export const TokenIcon: FC<TokenIconProps> = (props) => {
-  const { token, onClick } = props;
+  const { token } = props;
   const color = useColorModeValue("gray.800", "green.400");
   return (
-    <Stack direction="row" alignItems="center">
-        <Icon href={token.logo} />
-        <Text color={color}>{token.symbol}</Text>
-      <Button onClick={onClick} p={1} size="sm" variant="outline" color={color}>v</Button>
-    </Stack>
+    <Button size="md" variant="outline" color={color} borderColor={color}>
+      <Image boxSize="3" m={1} objectFit="cover" src={token.logo.sm} alt={token.name} />
+      <Text color={color} m={1} fontSize="xs">
+        {token.symbol}
+      </Text>
+    </Button>
   );
 };

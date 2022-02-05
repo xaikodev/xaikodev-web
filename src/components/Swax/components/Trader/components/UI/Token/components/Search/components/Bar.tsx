@@ -1,3 +1,4 @@
+import { Input } from "@chakra-ui/input";
 import { ChangeEventHandler, FC } from "react";
 
 interface BarProps {
@@ -7,11 +8,9 @@ interface BarProps {
 
 export const Bar: FC<BarProps> = (props) => {
   const { value, onChange } = props;
-  const changeHandler: ChangeEventHandler<HTMLInputElement> = ({
-    target: { value }
-  }) => {
+  const changeHandler: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
     onChange(value);
   };
 
-  return <input type={"search"} value={value} onChange={changeHandler} />;
+  return <Input placeholder="WAX" variant="outline" size="sm" type={"search"} value={value} onChange={changeHandler} />;
 };

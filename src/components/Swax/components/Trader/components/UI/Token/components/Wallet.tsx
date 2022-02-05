@@ -1,9 +1,9 @@
 import { Button, Text, useColorModeValue } from "@chakra-ui/react";
 import { FC } from "react";
-import { WalletToken } from "src/components/Swax/hooks/useWallet";
+import { Token } from "src/components/Swax/models/wax.models";
 
 interface WalletProps {
-  token: WalletToken;
+  token: Token;
   onClick: () => void;
 }
 export const Wallet: FC<WalletProps> = (props) => {

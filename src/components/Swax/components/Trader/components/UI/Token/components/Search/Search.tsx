@@ -1,26 +1,25 @@
 import { FC, useState } from "react";
 import { Bar } from "./components/Bar";
-import { List } from "./components/List";
+import List from "./components/List";
+import { PopoverContent, PopoverHeader, PopoverBody } from "@chakra-ui/react";
+import { Token } from "src/components/Swax/models/wax.models";
 
 interface SearchProps {
-  opened: boolean;
-  currentToken: string;
-  selectToken: (token: string) => void;
+  currentToken: Token;
+  selectToken: (token: Token) => void;
 }
 export const Search: FC<SearchProps> = (props) => {
-  const { opened, currentToken, selectToken } = props;
-  const [SearchInput, setSearchInput] = useState(currentToken);
+  const { currentToken, selectToken } = props;
+  const [SearchInput, setSearchInput] = useState(currentToken.name);
 
   return (
-    <div style={{ display: opened ? "block" : "none" }}>
-      <div style={{ display: "flex", flexDirection: "column" }}>
+    <PopoverContent minHeight={{ base: "3xs", sm: "2xs" }} maxHeight={{ base: "3xs" }} overflowY="scroll" minWidth={{ base: "2xs", sm: "xs" }} maxWidth={{ base: "2xs", sm: "xs" }}>
+      <PopoverHeader>
         <Bar value={SearchInput} onChange={setSearchInput} />
-        <List
-          filter={SearchInput}
-          onSelect={selectToken}
-          currentToken={currentToken}
-        />
-      </div>
-    </div>
+      </PopoverHeader>
+      <PopoverBody>
+        <List filter={SearchInput} onSelect={selectToken} currentToken={currentToken} />
+      </PopoverBody>
+    </PopoverContent>
   );
 };

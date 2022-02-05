@@ -1,58 +1,61 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import * as waxjs from "@waxio/waxjs/dist";
-import { GetAccountResult, GetTableRowsResult } from "eosjs/dist/eosjs-rpc-interfaces";
+import { GetTableRowsResult } from "eosjs/dist/eosjs-rpc-interfaces";
 import { Action } from "eosjs/dist/eosjs-serialize";
 import { TransactConfig } from "eosjs/dist/eosjs-api-interfaces";
-
-export interface WAXToken {
-  amount: number;
-  contract: string;
-  precision: number;
-  symbol: string;
-}
-export interface WaxAccount {
-  name: string;
-  pubKeys: string[];
-  wallet: WAXToken[];
-  details: GetAccountResult;
-}
-
-export interface GetProps {
-  code: string;
-  scope: string;
-  table: string;
-  lower_bound?: string | null;
-  upper_bound?: string | null;
-  index: number;
-  key_type: string;
-  limit: string;
-  reverse?: boolean;
-  show_payer?: boolean;
-}
+import { Account, EOSCafeToken, GetProps, Token } from "../models/wax.models";
+import { GetTokens } from "../utils/tokens";
 
 interface UseWax {
   wax: waxjs.WaxJS;
-  account: WaxAccount;
+  account: Account;
+  tokens: Token[];
   isConnected: boolean;
   login: () => Promise<void>;
+  logout: () => void
   transact: (actions: Action[], options?: TransactConfig) => Promise<void>;
   get: (props: GetProps) => Promise<GetTableRowsResult>;
 }
 
 const WaxContext = createContext<UseWax>({} as UseWax);
-
 export const useWax = () => useContext(WaxContext);
 
+const wax = new waxjs.WaxJS({ rpcEndpoint: "https://wax.greymass.com" });
+
 export const WaxProvider: React.FC = ({ children }) => {
-  const wax = useMemo(() => new waxjs.WaxJS({ rpcEndpoint: "https://wax.greymass.com" }), []);
-  const [account, setAccount] = useState<WaxAccount>({ name: wax.userAccount, pubKeys: wax.pubKeys } as WaxAccount);
+  const [account, setAccount] = useState<Account>({
+    name: wax.userAccount,
+    pubKeys: wax.pubKeys,
+  } as Account);
+  const [tokens, setTokens] = useState<Token[]>([]);
+
+  const [isConnected, setIsConnected] = useState(false);
+
+  const getWallet = async (account: string) => {
+    const newTokens = await GetTokens(account)
+    setTokens(newTokens);
+    return newTokens.filter(t => t.balance > 0)
+  };
+
+  const getDetails = async (account: string) => {
+    try {
+      return await wax.rpc.get_account(account);
+    } catch (e) {
+      throw e;
+    }
+  };
 
   const login = useCallback(async () => {
     const accountName = await wax.login();
-    const details = await getDetails();
-    const wallet = await getWallet();
+    const details = await getDetails(accountName);
+    const wallet = await getWallet(accountName);
     setAccount({ pubKeys: wax.pubKeys, name: accountName, details, wallet });
-  }, [wax, setAccount]);
+    setIsConnected(true);
+  }, [getDetails, getWallet]);
+
+  const logout = () => {
+    setIsConnected(false);
+  };
 
   const transact = useCallback(
     async (actions: Action[], options?: TransactConfig) => {
@@ -87,24 +90,6 @@ export const WaxProvider: React.FC = ({ children }) => {
     [wax]
   );
 
-  const getWallet = useCallback(async () => {
-    try {
-      const response = await fetch(`https://wax.eosrio.io/v2/state/get_tokens?account=${account.name}`);
-      const result = await response.json();
-      return await result.tokens;
-    } catch (e) {
-      throw e;
-    }
-  }, [account]);
-
-  const getDetails = useCallback(async () => {
-    try {
-      return await wax.rpc.get_account(account.name);
-    } catch (e) {
-      throw e;
-    }
-  }, [wax, account]);
-
   useEffect(() => {
     wax.isAutoLoginAvailable().then((isAutoLoginAvailable) => {
       if (isAutoLoginAvailable) {
@@ -119,8 +104,10 @@ export const WaxProvider: React.FC = ({ children }) => {
     <WaxContext.Provider
       value={{
         account,
+        tokens,
         login,
-        isConnected: Boolean(account.name),
+        logout,
+        isConnected,
         wax,
         transact,
         get,
