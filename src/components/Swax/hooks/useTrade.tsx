@@ -1,6 +1,6 @@
 import { createContext, FC, useContext, useEffect, useState } from "react";
+import { AlcorPool } from "../models/alcor.models";
 import { Token } from "../models/wax.models";
-import { useAlcor } from "./useAlcor";
 import { useWax } from "./useWax";
 
 export interface TradeContextInterface {
@@ -8,7 +8,6 @@ export interface TradeContextInterface {
   pairToken: Token;
   value: number;
   pairValue: number;
-  availableTokens: Token[];
   trade: () => void;
   switchTokens: () => void;
   changeToken: (token: Token) => void;
@@ -20,20 +19,23 @@ export interface TradeContextInterface {
 const TradeContext = createContext({} as TradeContextInterface);
 
 const useTradeHook: () => TradeContextInterface = () => {
-  const { tokens } = useWax();
-  const { pools, swap } = useAlcor();
+  const { tokens, account, transact, get } = useWax();
 
-  const [token, setToken] = useState<Token>(tokens.find((t) => t.symbol === "WAX")!);
-  const [pairToken, setPairToken] = useState<Token>(tokens.find((t) => t.symbol === "TLM")!);
+  const [pools, setPools] = useState<AlcorPool[]>([]);
+
+  const [token, setToken] = useState<Token>(tokens[0]);
+  const [pairToken, setPairToken] = useState<Token>(tokens[1]);
 
   const [value, setValue] = useState(0);
   const [pairValue, setPairValue] = useState(0);
 
-  const [availableTokens, setAvailableTokens] = useState<Token[]>([]);
+  const changePairValue = (val: number) => {
+    setPairValue(val);
+  };
 
-  const changePairValue = (val: number) => {};
-
-  const changeValue = (val: number) => {};
+  const changeValue = (val: number) => {
+    setValue(val);
+  };
 
   const resetValues = () => {
     setValue(0);
@@ -49,8 +51,12 @@ const useTradeHook: () => TradeContextInterface = () => {
     }
   };
   const changePairToken = (token: Token) => {
-    setPairToken(token);
-    resetValues();
+    if (token.contract === pairToken.contract && token.symbol === pairToken.symbol) {
+      switchTokens();
+    } else {
+      setPairToken(token);
+      resetValues();
+    }
   };
 
   const switchTokens = () => {
@@ -60,14 +66,83 @@ const useTradeHook: () => TradeContextInterface = () => {
     resetValues();
   };
 
-  const trade = () => {};
+  const swap = async (tokenFrom: Token, tokenTo: Token, quantity: number, minReceived: number) => {
+    transact([
+      {
+        account: tokenFrom.contract,
+        name: "transfer",
+        authorization: [
+          {
+            actor: account.name,
+            permission: "active",
+          },
+        ],
+        data: {
+          from: account.name,
+          to: "alcorammswap",
+          quantity: `${quantity} ${tokenFrom.symbol}`,
+          memo: `${minReceived} ${tokenTo.symbol}@${tokenTo.contract}`,
+        },
+      },
+    ]);
+  };
 
   const estimatePrice = (tokenBuy: Token, tokenSell: Token) => {};
 
+  const trade = () => {};
+
+  const getPools = async () => {
+    try {
+      const tablePools = await get({
+        code: "alcorammswap",
+        scope: "alcorammswap",
+        table: "pairs",
+        lower_bound: null,
+        upper_bound: null,
+        index: 1,
+        key_type: "",
+        limit: "100000",
+        reverse: false,
+        show_payer: false,
+      });
+      const pools: AlcorPool[] = tablePools.rows.map((row: any) => {
+        return {
+          id: row.id,
+          contract: "alcorammswap",
+          symbol: row.supply.split(" ")[1],
+          supply: Number(row.supply.split(" ")[0]),
+          fee: row.fee,
+          fee_contract: row.fee_contract,
+          pair: [
+            {
+              quantity: Number(row.pool1.quantity.split(" ")[0]),
+              contract: row.pool1.contract,
+              name: row.pool1.quantity.split(" ")[1],
+            },
+            {
+              quantity: Number(row.pool2.quantity.split(" ")[0]),
+              contract: row.pool2.contract,
+              name: row.pool2.quantity.split(" ")[1],
+            },
+          ],
+        };
+      });
+      setPools(pools);
+    } catch (e) {
+      throw e;
+    }
+  };
 
   useEffect(() => {}, [token]);
 
-  return { token, pairToken, value, pairValue, availableTokens, trade, switchTokens, changeToken, changePairToken, changeValue, changePairValue };
+  useEffect(() => {
+    const pairTimeout = setInterval(() => getPools(), 2000);
+    return () => {
+      clearInterval(pairTimeout);
+    };
+  }, []);
+
+  return { token, pairToken, value, pairValue, trade, switchTokens, changeToken, changePairToken, changeValue, changePairValue };
 };
 
 export const ProvideTrade: FC = ({ children }) => {

@@ -3,7 +3,7 @@ import * as waxjs from "@waxio/waxjs/dist";
 import { GetTableRowsResult } from "eosjs/dist/eosjs-rpc-interfaces";
 import { Action } from "eosjs/dist/eosjs-serialize";
 import { TransactConfig } from "eosjs/dist/eosjs-api-interfaces";
-import { Account, EOSCafeToken, GetProps, Token } from "../models/wax.models";
+import { Account, GetProps, Token } from "../models/wax.models";
 import { GetTokens } from "../utils/tokens";
 
 interface UseWax {
@@ -12,7 +12,7 @@ interface UseWax {
   tokens: Token[];
   isConnected: boolean;
   login: () => Promise<void>;
-  logout: () => void
+  logout: () => void;
   transact: (actions: Action[], options?: TransactConfig) => Promise<void>;
   get: (props: GetProps) => Promise<GetTableRowsResult>;
 }
@@ -28,13 +28,12 @@ export const WaxProvider: React.FC = ({ children }) => {
     pubKeys: wax.pubKeys,
   } as Account);
   const [tokens, setTokens] = useState<Token[]>([]);
-
   const [isConnected, setIsConnected] = useState(false);
 
   const getWallet = async (account: string) => {
-    const newTokens = await GetTokens(account)
+    const newTokens = await GetTokens(account);
     setTokens(newTokens);
-    return newTokens.filter(t => t.balance > 0)
+    return newTokens.filter((t) => t.balance > 0);
   };
 
   const getDetails = async (account: string) => {
@@ -75,20 +74,17 @@ export const WaxProvider: React.FC = ({ children }) => {
     [wax]
   );
 
-  const get = useCallback(
-    async (props: GetProps) => {
-      const tableRows = await wax.api.rpc.get_table_rows({
-        json: true,
-        lower_bound: null,
-        upper_bound: null,
-        reverse: false,
-        show_payer: false,
-        ...props,
-      });
-      return tableRows;
-    },
-    [wax]
-  );
+  const get = async (props: GetProps) => {
+    const tableRows = await wax.api.rpc.get_table_rows({
+      json: true,
+      lower_bound: null,
+      upper_bound: null,
+      reverse: false,
+      show_payer: false,
+      ...props,
+    });
+    return tableRows;
+  };
 
   useEffect(() => {
     wax.isAutoLoginAvailable().then((isAutoLoginAvailable) => {
@@ -98,7 +94,7 @@ export const WaxProvider: React.FC = ({ children }) => {
         });
       }
     });
-  }, [wax]);
+  }, [wax.isAutoLoginAvailable]);
 
   return (
     <WaxContext.Provider

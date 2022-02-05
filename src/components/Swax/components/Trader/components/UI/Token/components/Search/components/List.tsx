@@ -11,18 +11,18 @@ interface ListProps {
 }
 const SearchList: FC<ListProps> = (props) => {
   const { filter, onSelect } = props;
-  const { account } = useWax();
-  const [filteredList, setFilteredList] = useState(account.wallet);
+  const { tokens } = useWax();
+  const [filteredList, setFilteredList] = useState(tokens);
 
   useEffect(() => {
     const debounce = setTimeout(() => {
-      setFilteredList(account.wallet.filter((t) => t.name.includes(filter) || t.symbol.includes(filter) || t.contract.includes(filter)));
+      setFilteredList(tokens.filter((t) => t.name.includes(filter) || t.symbol.includes(filter) || t.contract.includes(filter)).slice(0, 20));
     }, 800);
 
     return () => {
       clearTimeout(debounce);
     };
-  }, [account.wallet, filter]);
+  }, [tokens, filter]);
 
   return (
     <Stack direction="column">

@@ -1,17 +1,19 @@
 import { Stack } from "@chakra-ui/react";
 import { FC } from "react";
+import { useTrade } from "../../../../hooks/useTrade";
 
 import { Switcher } from "../UI/Switcher";
-import Buy from "../UI/Token/SellToken";
-import Sell from "../UI/Token/BuyToken";
+import Token from "../UI/Token/";
 
 interface TradeProps {}
 export const Trade: FC<TradeProps> = (props) => {
+  const { token, pairToken, value, pairValue, changeValue, changeToken, changePairToken, changePairValue } = useTrade();
+
   return (
     <Stack minHeight="xs" direction="column" alignItems="center" justifyContent="space-evenly">
-      <Buy />
+      {token && <Token token={token} changeToken={changeToken} action="Buy" value={value} changeValue={changeValue} />}
       <Switcher />
-      <Sell />
+      {pairToken && <Token token={pairToken} changeToken={changePairToken} action="Buy" value={pairValue} changeValue={changePairValue} />}
     </Stack>
   );
 };

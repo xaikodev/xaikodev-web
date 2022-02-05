@@ -1,3 +1,4 @@
+import { Icon } from "@chakra-ui/react";
 import { EOSAmsterdamToken, EOSCafeToken, Token } from "../models/wax.models";
 
 const EOSCafeTokens: () => Promise<EOSCafeToken[]> = async () => {
@@ -21,19 +22,6 @@ export const GetTokens = async (acc: string) => {
   let NoLogoTokens: Token[] = [];
   let LogoTokens: Token[] = [];
 
-  accountTokens.forEach((eosA) => {
-    if (EOSTokens.findIndex((eosT) => isSameToken(eosT, eosA)) !== -1) {
-      NoLogoTokens.push({
-        contract: eosA.contract,
-        name: eosA.currency,
-        symbol: eosA.currency,
-        balance: Number(eosA.amount),
-        precision: Number(eosA.decimals),
-        logo: {},
-      });
-    }
-  });
-
   LogoTokens = EOSTokens.map((eosT) => {
     const availableToken = accountTokens.find((eosA) => isSameToken(eosT, eosA));
     const balance = Number(availableToken?.amount) || 0;
@@ -48,5 +36,26 @@ export const GetTokens = async (acc: string) => {
     };
   });
 
-  return [...NoLogoTokens, ...LogoTokens];
+  accountTokens.forEach((eosA) => {
+    if (LogoTokens.findIndex((lgToken) => lgToken.contract === eosA.contract && lgToken.symbol === eosA.currency) !== -1) {
+      return;
+    }
+
+    if (EOSTokens.findIndex((eosT) => isSameToken(eosT, eosA)) !== -1) {
+      return;
+    }
+
+    NoLogoTokens.push({
+      contract: eosA.contract,
+      name: eosA.currency,
+      symbol: eosA.currency,
+      balance: Number(eosA.amount),
+      precision: Number(eosA.decimals),
+      logo: {},
+    });
+  });
+
+  const newTokens = [...NoLogoTokens, ...LogoTokens].sort((a, b) => b.balance - a.balance);
+
+  return newTokens;
 };

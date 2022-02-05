@@ -8,32 +8,33 @@ import { Search } from "./components/Search/Search";
 import { TokenIcon } from "./components/TokenIcon";
 import { Wallet } from "./components/Wallet";
 
-interface TokenProps {}
+interface TokenProps {
+  token: Token;
+  value: number;
+  action: string;
+  changeToken: (token: Token) => void;
+  changeValue: (val: number) => void;
+}
 
 const TokenComponent: FC<TokenProps> = (props) => {
-  const { pairToken, pairValue, changePairToken, changePairValue } = useTrade();
+  const { token, value, action, changeToken, changeValue } = props;
 
   const setMaxValue = () => {
-    changePairValue(pairToken.balance);
+    changeValue(token.balance);
   };
 
-  const selectToken = (token: Token) => {
-    changePairToken(token);
-  };
   return (
-    <Stack direction="column">
+    <Stack direction="column" width="full">
       <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Action text="Sell" />
-        <Wallet token={pairToken} onClick={setMaxValue} />
+        <Action text={action} />
+        <Wallet token={token} onClick={setMaxValue} />
       </Stack>
       <Popover>
-        <PopoverTrigger>
-          <Stack direction="row" alignItems="center" justifyContent="space-around">
-            <Input value={pairValue} onChange={changePairValue} />
-            <TokenIcon token={pairToken} />
-          </Stack>
-        </PopoverTrigger>
-        <Search currentToken={pairToken} selectToken={selectToken} />
+        <Stack direction="row" alignItems="center" justifyContent="space-around">
+          <Input value={value} onChange={changeValue} />
+          <TokenIcon token={token} />
+        </Stack>
+        <Search currentToken={token} selectToken={changeToken} />
       </Popover>
     </Stack>
   );

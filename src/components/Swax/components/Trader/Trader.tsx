@@ -60,7 +60,7 @@ export const Trader: FC<TraderProps> = (props) => {
             <Arbitrage />
           </TabPanel>
         </TabPanels>
-      </Tabs>1
+      </Tabs>
     </ProvideAlcor>
   );
 };
