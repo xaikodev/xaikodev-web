@@ -1,30 +1,22 @@
 import React, { createContext, FC, useCallback, useContext, useEffect, useState } from "react";
-import { useWax, WAXToken } from "./useWax";
-
-type AlcorPair = {
-  id: string;
-  contract: string;
-  symbol: string;
-  supply: number;
-  fee: number;
-  fee_contract: string;
-  pair: { quantity: number; contract: string; name: string }[];
-};
+import { AlcorPool } from "../models/alcor.models";
+import { Token } from "../models/wax.models";
+import { useWax } from "./useWax";
 
 export interface AlcorContextType {
-  pairs: AlcorPair[];
-  swap: (tokenFrom: WAXToken, tokenTo: WAXToken, quantity: number, minReceived: number) => Promise<void>;
+  pools: AlcorPool[];
+  swap: (tokenFrom: Token, tokenTo: Token, quantity: number, minReceived: number) => Promise<void>;
 }
 
 const AlcorContext = createContext({} as AlcorContextType);
 
 const useAlcorHook: () => AlcorContextType = () => {
-  const { wax, transact, get, account } = useWax();
-  const [pairs, setPairs] = useState<AlcorPair[]>([]);
+  const { transact, get, account } = useWax();
+  const [pools, setPools] = useState<AlcorPool[]>([]);
 
-  const getPairs = useCallback(async () => {
+  const getPools = async () => {
     try {
-      const tablePairs = await get({
+      const tablePools = await get({
         code: "alcorammswap",
         scope: "alcorammswap",
         table: "pairs",
@@ -36,7 +28,7 @@ const useAlcorHook: () => AlcorContextType = () => {
         reverse: false,
         show_payer: false,
       });
-      const pairs: AlcorPair[] = tablePairs.rows.map((row: any) => {
+      const pools: AlcorPool[] = tablePools.rows.map((row: any) => {
         return {
           id: row.id,
           contract: "alcorammswap",
@@ -58,51 +50,43 @@ const useAlcorHook: () => AlcorContextType = () => {
           ],
         };
       });
-      setPairs(pairs);
+      setPools(pools);
     } catch (e) {
       throw e;
     }
-  }, [wax, setPairs]);
+  };
 
-  const estimate = useCallback(async(tokenFrom: WAXToken, tokenTo: WAXToken) => {}, [wax])
-
-  const swap = useCallback(
-    async (tokenFrom: WAXToken, tokenTo: WAXToken, quantity: number, minReceived: number) => {
-      transact([
-        {
-          account: tokenFrom.contract,
-          name: "transfer",
-          authorization: [
-            {
-              actor: account.name,
-              permission: "active",
-            },
-          ],
-          data: {
-            from: account.name,
-            to: "alcorammswap",
-            quantity: `${quantity} ${tokenFrom.symbol}`,
-            memo: `${minReceived} ${tokenTo.symbol}@${tokenTo.contract}`,
+  const swap = async (tokenFrom: Token, tokenTo: Token, quantity: number, minReceived: number) => {
+    transact([
+      {
+        account: tokenFrom.contract,
+        name: "transfer",
+        authorization: [
+          {
+            actor: account.name,
+            permission: "active",
           },
+        ],
+        data: {
+          from: account.name,
+          to: "alcorammswap",
+          quantity: `${quantity} ${tokenFrom.symbol}`,
+          memo: `${minReceived} ${tokenTo.symbol}@${tokenTo.contract}`,
         },
-      ]);
-    },
-    [transact]
-  );
-
-  const arbitrage = useCallback(async () => {}, [wax])
+      },
+    ]);
+  };
 
   useEffect(() => {
-    const pairTimeout = setInterval(() => getPairs(), 10000);
+    const pairTimeout = setInterval(() => getPools(), 2000);
     return () => {
       clearInterval(pairTimeout);
     };
-  }, [wax]);
-  ``;
-  return { pairs, swap };
+  }, []);
+  return { pools, swap };
 };
 
-export const ProvideTokens: FC = ({ children }) => {
+export const ProvideAlcor: FC = ({ children }) => {
   const AlcorHook = useAlcorHook();
   return <AlcorContext.Provider value={AlcorHook}>{children}</AlcorContext.Provider>;
 };

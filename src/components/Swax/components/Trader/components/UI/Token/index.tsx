@@ -1,7 +1,7 @@
-import { Stack } from "@chakra-ui/react";
-import { FC, useState } from "react";
-import { WalletToken } from "src/components/Swax/hooks/useWallet";
-import { useClickOutside } from "src/hooks/useClickOutside";
+import { Stack, Popover, PopoverTrigger } from "@chakra-ui/react";
+import { FC } from "react";
+import { useTrade } from "src/components/Swax/hooks/useTrade";
+import { Token } from "src/components/Swax/models/wax.models";
 import { Action } from "./components/Action";
 import { Input } from "./components/Input";
 import { Search } from "./components/Search/Search";
@@ -9,44 +9,35 @@ import { TokenIcon } from "./components/TokenIcon";
 import { Wallet } from "./components/Wallet";
 
 interface TokenProps {
+  token: Token;
+  value: number;
   action: string;
-  token: WalletToken;
+  changeToken: (token: Token) => void;
+  changeValue: (val: number) => void;
 }
 
-export const Token: FC<TokenProps> = (props) => {
-  const { token, action } = props;
-  const [value, setValue] = useState(0);
-  const [OpenedSearch, setOpenedSearch] = useState(false);
+const TokenComponent: FC<TokenProps> = (props) => {
+  const { token, value, action, changeToken, changeValue } = props;
 
-  const setMaxValue = () => {};
-  const openSearch = () => {
-    setOpenedSearch((prevVal) => !prevVal);
+  const setMaxValue = () => {
+    changeValue(token.balance);
   };
-
-  const selectToken = (token: string) => {
-    setOpenedSearch(false);
-  };
-
-  const cancelSearch = () => {
-    setOpenedSearch(false);
-  };
-  const SearchRef = useClickOutside(cancelSearch);
 
   return (
-    <Stack direction="column" ref={SearchRef}>
+    <Stack direction="column" width="full">
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Action text={action} />
         <Wallet token={token} onClick={setMaxValue} />
       </Stack>
-      <Stack direction="row">
-        <Input value={value} onChange={setValue} />
-        <TokenIcon token={token} onClick={openSearch} />
-      </Stack>
-      <Search
-        opened={OpenedSearch}
-        currentToken={token.name}
-        selectToken={selectToken}
-      />
+      <Popover>
+        <Stack direction="row" alignItems="center" justifyContent="space-around">
+          <Input value={value} onChange={changeValue} />
+          <TokenIcon token={token} />
+        </Stack>
+        <Search currentToken={token} selectToken={changeToken} />
+      </Popover>
     </Stack>
   );
 };
+
+export default TokenComponent;

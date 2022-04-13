@@ -1,42 +1,19 @@
 import { Stack } from "@chakra-ui/react";
 import { FC } from "react";
-import { WalletToken } from "src/components/Swax/hooks/useWallet";
+import { useTrade } from "../../../../hooks/useTrade";
+
 import { Switcher } from "../UI/Switcher";
-import { Token } from "../UI/Token";
+import Token from "../UI/Token/";
 
 interface TradeProps {}
 export const Trade: FC<TradeProps> = (props) => {
-  const token1: WalletToken = {
-    account: "eosio.token",
-    balance: 0,
-    chain: "wax",
-    decimals: 8,
-    logo: "",
-    logo_lg: "",
-    name: "WAX",
-    symbol: "WAX",
-  };
-  const token2: WalletToken = {
-    account: "alien.worlds",
-    balance: 0,
-    chain: "wax",
-    decimals: 4,
-    logo: "",
-    logo_lg: "",
-    name: "Trilium",
-    symbol: "TLM",
-  };
-  const {} = props;
+  const { token, pairToken, value, pairValue, changeValue, changeToken, changePairToken, changePairValue } = useTrade();
+
   return (
-    <Stack
-      minHeight="xs"
-      direction="column"
-      alignItems="center"
-      justifyContent="space-evenly"
-    >
-      <Token token={token1} action="Buy" />
+    <Stack minHeight="xs" direction="column" alignItems="center" justifyContent="space-evenly">
+      {token && <Token token={token} changeToken={changeToken} action="Buy" value={value} changeValue={changeValue} />}
       <Switcher />
-      <Token token={token2} action="Sell" />
+      {pairToken && <Token token={pairToken} changeToken={changePairToken} action="Buy" value={pairValue} changeValue={changePairValue} />}
     </Stack>
   );
 };

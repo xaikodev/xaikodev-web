@@ -1,16 +1,14 @@
-import { Stack } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import { Charter } from "src/components/Swax/components/Charter";
-import { Trader } from "src/components/Swax/components/Trader/Trader";
-import { WaxProvider } from "src/components/Swax/hooks/useWax";
+import { Connect } from "src/components/Swax/components/Connect";
+import { ProvideAlcor } from "src/components/Swax/hooks/useAlcor";
+import { useWax, WaxProvider } from "src/components/Swax/hooks/useWax";
 
 const Swax: NextPage = () => {
+  const { isConnected } = useWax();
+  console.log(isConnected);
   return (
     <WaxProvider>
-      <Stack direction={"row"} width="full" wrap="wrap">
-      <Trader />
-      <Charter />
-      </Stack>
+      <Connect />
     </WaxProvider>
   );
 };
