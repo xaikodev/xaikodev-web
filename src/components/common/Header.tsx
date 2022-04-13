@@ -262,13 +262,13 @@ const NAV_ITEMS: Array<NavItem> = [
         href: "/projects/swax",
       },
       {
-        label: "Universum",
-        subLabel: "MMO strategy game built on Binance Blockchain",
+        label: "Masters Of The Realm",
+        subLabel: "MMORPG game built on ESIO | WAX Blockchain",
         href: "/projects/universum",
       },
       {
-        label: "More...",
-        subLabel: "My entire list of projects",
+        label: "Portfolio",
+        subLabel: "A set of diverse client projects",
         href: "/projects",
       },
     ],
