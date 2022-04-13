@@ -12,7 +12,7 @@ export const TokenIcon: FC<TokenIconProps> = (props) => {
   return (
     <PopoverTrigger>
       <Button size="md" variant="outline" color={color} borderColor={color}>
-        <Image boxSize="3" m={1} objectFit="cover" src={token.logo.sm} />
+        <Image boxSize="3" m={1} objectFit="cover" src={token.logo.sm} alt={token.name}/>
         <Text color={color} m={1} fontSize="xs">
           {token.symbol}
         </Text>

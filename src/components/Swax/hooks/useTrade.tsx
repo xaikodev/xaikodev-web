@@ -140,7 +140,7 @@ const useTradeHook: () => TradeContextInterface = () => {
     return () => {
       clearInterval(pairTimeout);
     };
-  }, []);
+  }, [getPools]);
 
   return { token, pairToken, value, pairValue, trade, switchTokens, changeToken, changePairToken, changeValue, changePairValue };
 };
