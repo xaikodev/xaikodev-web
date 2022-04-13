@@ -27,8 +27,8 @@ const SearchList: FC<ListProps> = (props) => {
   return (
     <Stack direction="column">
       <List spacing={3}>
-        {filteredList.map((token) => (
-          <ListItem>
+        {filteredList.map((token, index) => (
+          <ListItem key={index}>
             <Item token={token} select={onSelect} />
           </ListItem>
         ))}

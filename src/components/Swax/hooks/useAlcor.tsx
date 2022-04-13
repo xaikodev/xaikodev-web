@@ -82,7 +82,7 @@ const useAlcorHook: () => AlcorContextType = () => {
     return () => {
       clearInterval(pairTimeout);
     };
-  }, []);
+  }, [getPools]);
   return { pools, swap };
 };
 
