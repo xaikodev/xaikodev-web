@@ -5,7 +5,7 @@ import { Team } from "../src/components/Home/UI/Team/Team";
 
 const Home: NextPage = () => {
   return (
-    <Box>
+    <Box width={"full"}>
       <Hero></Hero>
       <Team></Team>
     </Box>
