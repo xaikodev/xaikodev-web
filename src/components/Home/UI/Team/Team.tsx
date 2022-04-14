@@ -1,4 +1,11 @@
-import { Box, Container, Image, Stack, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Image,
+  Stack,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
 type Teammate = {
   image?: string;
@@ -12,7 +19,7 @@ export const Team = () => {
     {
       name: "Alexandru Meiroșu",
       role: "Project Manager",
-      secondRole: "Market Specialist",
+      secondRole: "Marketing Specialist",
     },
     {
       name: "Lucian Petri",
@@ -28,6 +35,7 @@ export const Team = () => {
 
   return (
     <Stack
+      minW={{ base: "md", md: "lg", lg: "3xl", xl: "full" }}
       backgroundColor={useColorModeValue("gray.600", "blackAlpha.500")}
       direction={"column"}
       marginTop={{ base: "52" }}
