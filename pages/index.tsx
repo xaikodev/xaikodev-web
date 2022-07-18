@@ -1,4 +1,4 @@
-import { Box, Container, Stack } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { Hero } from "../src/components/Home/Hero";
 import { Solutions } from "../src/components/Home/Solutions";

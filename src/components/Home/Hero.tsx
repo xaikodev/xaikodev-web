@@ -4,8 +4,7 @@ import {
   Stack,
   Text,
   Button,
-  Input,
-  Image,
+  Input
 } from "@chakra-ui/react";
 
 export const Hero = () => {

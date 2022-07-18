@@ -1,6 +1,4 @@
 import {
-  Box,
-  Container,
   Image,
   Stack,
   Text,
