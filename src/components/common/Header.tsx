@@ -182,9 +182,10 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
 const MobileNav = () => {
   return (
     <Stack
-      bg={useColorModeValue('white', 'gray.800')}
+      bg={useColorModeValue("white", "gray.800")}
       p={4}
-      display={{ md: 'none' }}>
+      display={{ md: "none" }}
+    >
       {NAV_ITEMS.map((navItem) => (
         <MobileNavItem key={navItem.label} {...navItem} />
       ))}
@@ -200,36 +201,39 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
       <Flex
         py={2}
         as={Link}
-        href={href ?? '#'}
-        justify={'space-between'}
-        align={'center'}
+        href={href ?? "#"}
+        justify={"space-between"}
+        align={"center"}
         _hover={{
-          textDecoration: 'none',
-        }}>
+          textDecoration: "none",
+        }}
+      >
         <Text
           fontWeight={600}
-          color={useColorModeValue('gray.600', 'gray.200')}>
+          color={useColorModeValue("gray.600", "gray.200")}
+        >
           {label}
         </Text>
         {children && (
           <Icon
             as={ChevronDownIcon}
-            transition={'all .25s ease-in-out'}
-            transform={isOpen ? 'rotate(180deg)' : ''}
+            transition={"all .25s ease-in-out"}
+            transform={isOpen ? "rotate(180deg)" : ""}
             w={6}
             h={6}
           />
         )}
       </Flex>
 
-      <Collapse in={isOpen} animateOpacity style={{ marginTop: '0!important' }}>
+      <Collapse in={isOpen} animateOpacity style={{ marginTop: "0!important" }}>
         <Stack
           mt={2}
           pl={4}
           borderLeft={1}
-          borderStyle={'solid'}
-          borderColor={useColorModeValue('gray.200', 'gray.700')}
-          align={'start'}>
+          borderStyle={"solid"}
+          borderColor={useColorModeValue("gray.200", "gray.700")}
+          align={"start"}
+        >
           {children &&
             children.map((child) => (
               <Link key={child.label} py={2} href={child.href}>
@@ -255,23 +259,7 @@ const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: "Projects",
-    children: [
-      {
-        label: "Swax",
-        subLabel: "Exchange Alcor Crypto Assests and perform arbitrage",
-        href: "/projects/swax",
-      },
-      {
-        label: "Masters Of The Realm",
-        subLabel: "MMORPG game built on ESIO | WAX Blockchain",
-        href: "/projects/universum",
-      },
-      {
-        label: "Portfolio",
-        subLabel: "A set of diverse client projects",
-        href: "/projects",
-      },
-    ],
+    href: "/projects",
   },
   {
     label: "Bio",
