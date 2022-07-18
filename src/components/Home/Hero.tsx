@@ -7,7 +7,6 @@ import {
   Input,
   Image,
 } from "@chakra-ui/react";
-import HeroImage from "../../lib/Hero Image.jpg";
 
 export const Hero = () => {
   return (

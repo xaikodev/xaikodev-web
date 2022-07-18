@@ -1,8 +1,8 @@
 import { Box, Container, Stack } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import { Hero } from "../src/components/Home/UI/Hero/Hero";
-import { Solutions } from "../src/components/Home/UI/Solutions/Solutions";
-import { Team } from "../src/components/Home/UI/Team/Team";
+import { Hero } from "../src/components/Home/Hero";
+import { Solutions } from "../src/components/Home/Solutions";
+import { Team } from "../src/components/Home/Team";
 
 const Home: NextPage = () => {
   return (
@@ -15,3 +15,4 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+``

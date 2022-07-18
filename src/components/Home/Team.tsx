@@ -58,7 +58,7 @@ export const Team = () => {
       >
         {team.map((teammate, index) => (
           <Stack
-            key={index}
+            key={index}   
             direction={"column"}
             borderRadius={"3xl"}
             minWidth={"xs"}
