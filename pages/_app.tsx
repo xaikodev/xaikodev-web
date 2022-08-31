@@ -4,10 +4,11 @@ import { Page } from "src/components/common/Page";
 import { ChakraProvider } from "@chakra-ui/react";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const BaseComponent = Component as any;
   return (
     <ChakraProvider>
       <Page>
-        <Component {...pageProps} />
+        <BaseComponent {...pageProps} />
       </Page>
     </ChakraProvider>
   );
